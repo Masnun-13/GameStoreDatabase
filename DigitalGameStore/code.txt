@@ -1,0 +1,154 @@
+/*
+CREATE TABLE game
+(	
+	id numeric(2,0),
+	name varchar(100),
+ 	price numeric(3,2),
+	dev varchar(100),
+	pub varchar(100),
+	rating numeric(3, 0),
+ 	sales_m numeric(5,0),
+ 	sales_t numeric(5,0),
+ 	primary key (name)
+)
+*/
+
+/*
+CREATE TABLE player
+(
+	id numeric(2,0),
+  	name varchar(100),
+	balance numeric(3,2),
+	email varchar(100),
+	game varchar(100),
+    	primary key (id)
+)
+*/
+
+/*
+CREATE TABLE dev
+(
+	id numeric(2,0),
+  	name varchar(100),
+	site varchar(100),
+	game varchar(100),
+	pub varchar(100),
+ 	rev_m numeric(5,0),
+    rev_t numeric(5,0),
+    primary key (id)
+)
+*/
+
+/*
+CREATE TABLE pub
+(
+	id numeric(2,0),
+  	name varchar(100),
+	site varchar(100),
+	game varchar(100),
+	dev varchar(100),
+ 	rev_m numeric(5,0),
+    rev_t numeric(5,0),
+    primary key (id)
+)
+*/
+
+/*
+CREATE TABLE reviews
+(
+	id numeric(2,0),
+  	game varchar(100),
+	rating numeric(3, 0),
+	reviewer varchar(100),
+	type varchar(10),
+	primary key (id)
+)
+*/
+
+/*
+INSERT INTO game VALUES (01, "Sonic The Hedgehog", 10.00, "SEGA", "SEGA", 75, 10, 50);
+INSERT INTO game VALUES (02, "Sonic The Hedgehog 2", 12.99, "SEGA", "SEGA", 89, 50, 300);
+INSERT INTO game VALUES (03, "Sonic The Hedgehog 3 & Knuckles", 20.00, "SEGA", "SEGA", 91, 90, 800);
+INSERT INTO game VALUES (04, "Persona", 29.99, "ATLUS", "SEGA", 80, 25, 100);
+INSERT INTO game VALUES (05, "Team Fortress 2", 0.00, "Valve", "Valve", 79, 200, 2000);
+INSERT INTO game VALUES (06, "Counter Strike: Global Offensive", 0.00, "Valve", "Valve", 72, 40, 240);
+*/
+
+/*
+INSERT INTO player VALUES (01, "Mario", 250.00, "supermario@gmail.com", "Sonic the Hedgehog 2");
+INSERT INTO player VALUES (02, "Mario", 250.00, "supermario@gmail.com", "Persona");
+INSERT INTO player VALUES (03, "Sonic", 110.00, "blueblur@gmail.com", "Sonic the Hedgehog");
+INSERT INTO player VALUES (04, "Sonic", 110.00, "blueblur@gmail.com", "Sonic the Hedgehog 2");
+INSERT INTO player VALUES (05, "Sonic", 110.00, "blueblur@gmail.com", "Sonic the Hedgehog 3 & Knuckles");
+INSERT INTO player VALUES (06, "Heavy", 400.00, "heavyweaponsguy@gmail.com", "Team Fortress 2");
+INSERT INTO player VALUES (07, "Scout", 50.00, "forceanature@gmail.com", "Team Fortress 2");
+*/
+
+/*
+INSERT INTO dev VALUES (01, "SEGA", "sega.com", "Sonic the Hedgehog", "SEGA", 300, 900);
+INSERT INTO dev VALUES (02, "SEGA", "sega.com", "Sonic the Hedgehog 2", "SEGA", 300, 900);
+INSERT INTO dev VALUES (03, "SEGA", "sega.com", "Sonic the Hedgehog 3 & Knuckles", "SEGA", 300, 900);
+INSERT INTO dev VALUES (04, "Atlus", "atlusdev.com", "Persona", "SEGA", 100, 350);
+INSERT INTO dev VALUES (05, "Valve", "valve.com", "Team Fortress 2", "Valve", 500, 1200);
+INSERT INTO dev VALUES (06, "Valve", "valve.com", "Counter Strike: Global Offensive", "Valve", 500, 1200);
+*/
+
+/*
+INSERT INTO pub VALUES (01, "SEGA", "sega.com", "Sonic the Hedgehog", "SEGA", 300, 900);
+INSERT INTO pub VALUES (02, "SEGA", "sega.com", "Sonic the Hedgehog 2", "SEGA", 300, 900);
+INSERT INTO pub VALUES (03, "SEGA", "sega.com", "Sonic the Hedgehog 3 & Knuckles", "SEGA", 300, 900);
+INSERT INTO pub VALUES (04, "SEGA", "sega.com", "Persona", "Atlus", 100, 350);
+INSERT INTO pub VALUES (05, "Valve", "valve.com", "Team Fortress 2", "Valve", 500, 1200);
+INSERT INTO pub VALUES (06, "Valve", "valve.com", "Counter Strike: Global Offensive", "Valve", 500, 1200);
+*/
+
+/*
+INSERT INTO reviews VALUES (01, "Sonic the Hedgehog", 90, "Johnny", "User");
+INSERT INTO reviews VALUES (02, "Sonic the Hedgehog", 0, "IGN", "Critic");
+INSERT INTO reviews VALUES (03, "Sonic the Hedgehog", 79, "Metacritic", "Critic");
+INSERT INTO reviews VALUES (04, "Sonic the Hedgehog 2", 88, "Metacritic", "Critic");
+INSERT INTO reviews VALUES (05, "Sonic the Hedgehog 2", 100, "Billy", "User");
+INSERT INTO reviews VALUES (06, "Sonic the Hedgehog 2", 89, "Steam", "Critic");
+INSERT INTO reviews VALUES (07, "Sonic the Hedgehog 2", 100, "GameStop", "Critic");
+INSERT INTO reviews VALUES (08, "Sonic the Hedgehog", 85, "GameStop", "Critic");
+INSERT INTO reviews VALUES (09, "Sonic the Hedgehog 2", 0, "IGN", "Critic");
+*/
+
+SELECT *
+FROM game;
+
+SELECT *
+FROM player;
+
+SELECT *
+FROM dev;
+
+SELECT *
+FROM pub;
+
+SELECT *
+FROM reviews
+ORDER BY game;
+
+SELECT name, rating, price
+FROM game
+WHERE price>=20;
+
+SELECT name, email, COUNT(game) AS "No. Of Games"
+FROM player
+GROUP BY name;
+
+SELECT DISTINCT p.name AS "publisher" , d.name AS "developer", d.site AS "dev_site", p.site AS "pub_site", d.game
+FROM dev d JOIN pub p
+ON d.pub=p.name;
+
+SELECT name AS "developer", site AS "dev_site", rev_t AS "d_total_rev", pub AS "publisher"
+FROM dev
+WHERE pub= (SELECT name
+			FROM pub
+			WHERE rev_t=900);
+
+SELECT game, ROUND(AVG(rating), 2) AS "Avg. Rating", COUNT(rating) AS "No. Of Critics"
+FROM reviews
+WHERE type="Critic"
+GROUP BY game;
